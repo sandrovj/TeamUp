@@ -1,0 +1,81 @@
+a:link
+{
+	color: rgb(128, 128, 128); 
+	font-size: 12px;
+}
+a:visited
+{
+	color: rgb(140, 140, 140); 
+		font-size: 12px;
+} 
+a:active 
+{
+	color: rgb(230,0,0);
+		font-size: 12px;
+}
+a:hover
+{
+	color: rgb(230,230,230);
+}
+
+body
+{
+	font-family: Verdana, Arial, Helvetica;
+	font-size: 12px;
+	color: rgb(240,240,240);
+	background-color: rgb(10,10,10);
+}
+h1, h2, h3, h4, h5, h6
+{
+	font-family: Arial, Verdana,  Helvetica;
+}
+h1
+{
+	color: rgb(255,204,0);
+	font-size: 32px;
+}
+h2
+{
+	color: rgb(0,0,128); 
+	font-size: 24px;
+}
+h3
+{
+	color: rgb(210, 210, 200); 
+	font-size: 18px;
+}
+h4
+{
+	color: rgb(0,0,132);
+	font-family: Courier new, Courier, Fixedsys, Verdana, Arial, Helvetica;
+	font-size : 12px;
+
+}
+h5
+{
+	color: rgb(0,0,132);
+	font-size: 14px;
+	vertical-align : middle;
+}
+
+/* Observacoes e notas de rodape */
+h6
+{
+	color: rgb(0,0,160);
+	font-size: 10px;
+}
+
+body:menuitem
+{
+	table-font-family: Arial, Verdana, Helvetica;
+	font-size: 18px ;
+	color: rgb(0, 0, 0);
+}
+table
+{
+	font-family: Arial, Verdana, Helvetica;
+	font-size: 14px;
+	color: rgb(32, 32, 32);
+
+
+}
