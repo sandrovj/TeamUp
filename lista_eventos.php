@@ -24,9 +24,9 @@
 	
 		$host="localhost";
 		//$host="dados.000webhost.com";
-		$user="id3193059_admin";
+		$user="id3200529_admin";
 		$pw="teamup";
-		$db="id3193059_teamup";
+		$db="id3200529_teamup";
 		// echo $query;
 		$link = mysqli_connect($host, $user, $pw, $db);
 		/* check connection */
@@ -60,9 +60,9 @@
 	Function obtem_nome_esporte($cdesp){
  		$host="localhost";
 		//$host="dados.000webhost.com";
-		$user="id3193059_admin";
+		$user="id3200529_admin";
 		$pw="teamup";
-		$db="id3193059_teamup";
+		$db="id3200529_teamup";
 		$query="SELECT nm_espt FROM esportes where cd_espt=$cdesp";
 		$link = mysqli_connect($host, $user, $pw, $db);
 		/* check connection */
@@ -81,7 +81,5 @@
 	}
 ?>
 
-
- 
  </body>
-</html>lista_eventos.php
+</html>

@@ -31,9 +31,9 @@
 		echo "<p> <b> detalhes do evento </b>\n";
 		$host="localhost";
 		//$host="dados.000webhost.com"
-		$user="id3193059_admin";
+		$user="id3200529_admin";
 		$pw="teamup";
-		$db="id3193059_teamup";
+		$db="id3200529_teamup";
 		if($cdevt>0) 
 			$query="SELECT * FROM eventos where cd_evnt=$cdevt";
 		// echo $query;
@@ -57,9 +57,9 @@
 	{
 		$host="localhost";
 		//$host="dados.000webhost.com";
-		$user="id3193059_admin";
+		$user="id3200529_admin";
 		$pw="teamup";
-		$db="id3193059_teamup";
+		$db="id3200529_teamup";
 		if($cdevt>0) 
 		{
 			$query="SELECT nm_atlt FROM atletas a, atlt_prtc_evnt b where b.cd_evnt=$cdevt and a.cd_atlt=b.cd_atlt";
