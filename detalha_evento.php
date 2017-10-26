@@ -32,10 +32,9 @@
 		echo "<p> <b> detalhes do evento </b>\n";
 
 		$host="localhost";
-		//$host="dados.000webhost.com"
-		$user="id3193059_admin";
+		$user="id3200529_admin";
 		$pw="teamup";
-		$db="id3193059_teamup";
+		$db="id3200529_teamup";
 
 		if($cdevt>0) 
 			$query="SELECT * FROM eventos where cd_evnt=$cdevt";
@@ -64,9 +63,9 @@
 	{
 		$host="localhost";
 		//$host="dados.000webhost.com";
-		$user="id3193059_admin";
+		$user="id3200529_admin";
 		$pw="teamup";
-		$db="id3193059_teamup";
+		$db="id3200529_teamup";
 
 		if($cdevt>0) 
 		{
@@ -103,9 +102,9 @@
 	Function form_inscricao($cdevt)
 	{
 		echo "<table>";
-		echo " <tr><td><a href=\".\confirmar_participação.php?cdevt=$cdevt\">Confirmar participação </a> </td> ";
+		echo " <tr><td><a href=\".\\form_participacao.php?cdevt=$cdevt&cdmnt=1\">Participar do evento </a> </td> ";
 
-		echo " <td><a href=\".\cancelar_participação.php?cdevt=$cdevt\">Cancelar participação </a> </td></tr>";
+		echo " <td><a href=\".\\form_participacao.php?cdevt=$cdevt&cdmnt=2\">Cancelar participação </a> </td></tr>";
 		   
 		echo "   </table>";
 	}
