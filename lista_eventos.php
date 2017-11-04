@@ -12,7 +12,11 @@
  <body>
 
 
-	<a href=index.php><img src="images/logo.jpg" width="246" height="70" border="0"></a>
+	<header>
+            <a id="logo-topo" href=index.php><img src="images/logo.jpg" width="246" height="70" border="0"></a>
+            <a class="botao-topo" href=form_eventos.php>Crie seu evento</a>
+            <a class="botao-topo" href=lista_eventos.php?cdesp=0>Veja os eventos disponiveis</a> 
+     </header>
 	<hr width="85%">
 
 
