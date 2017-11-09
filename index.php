@@ -2,14 +2,19 @@
 <html lang="pt-BR">
     <head>
         <meta charset="UTF-8">
-            <link rel="stylesheet" type="text/css" href="teamup.css"><title>TeamUp</title>
+            <link rel="stylesheet" type="text/css" href="teamup.css">
+            <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+            <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/jquery-ui.min.js"></script>
+            <link rel="stylesheet" type="text/css" href="jquery-ui-1-8-11.css">
+            <title>TeamUp</title>
     </head>
  
     <body>
         <header>
             <a id="logo-topo" href=index.php><img src="images/logo.jpg" width="246" height="70" border="0"></a>
             <a class="botao-topo" href=form_eventos.php>Crie seu evento</a>
-            <a class="botao-topo" href=lista_eventos.php?cdesp=0>Veja os eventos disponiveis</a> 
+            <a class="botao-topo" href=lista_eventos.php?cdesp=0>Veja todos os eventos disponiveis</a> 
+            <a id="createNew" class="botao-topo"'><img src="images/list%20(1).png" width="40" height="40" border="0"></a>
             
         </header>
     
@@ -121,9 +126,50 @@
                 return true;
             }
          ?>
+        
         <footer>
             
         </footer>
+        
+        <script type="text/javascript">
+
+            $(document).ready(function(){
+
+                var $dialog = $('<div></div>')
+                .html('<form id="myform" action=""><input type="checkbox"   id="futebol" name="esp1" value="Futebol" />Futebol<br /><input type="checkbox" name="esp2" value="voleibol" /> Voleibol <br /><input type="checkbox" name="esp3" value="corrida" />Corrida<br /><input type="checkbox" name="esp4" value="tenis" />Tenis<br /><input type="checkbox" name="esp5" value="outros" />Outros esportes<br /></form>')
+                .dialog({
+                    autoOpen: false,
+                    title: 'Selecione as modalidades',
+                    /*position: { my: "center top", at: "top center"},*/
+                    buttons: {
+                      "Confirmar": function() {  $('form#myform').submit();},
+                      "Cancelar": function() {$(this).dialog("close");}
+                    }
+                });
+
+                $('#createNew').click(function() {
+                    $dialog.dialog('open');
+                    // prevent the default action, e.g., following a link
+                    return false;
+                });
+
+                $('form#myform').submit(function(){
+                    // alert('Futebol checkobox is checked or not ==> ' + $('#futebol').is(':checked'));
+
+                    // loop like this
+
+                    // $(this).find('input[type="checkbox"]').each(function(){
+                    //  alert($(this).val() + ' ==> ' + $(this).is(':checked'));
+                    // })
+
+
+                    $dialog.dialog('close');
+                });        
+
+
+            });
+        </script>
+
     </body>
 </html>
 
