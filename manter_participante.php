@@ -1,11 +1,7 @@
 <!doctype html>
-<html lang="en">
+<html lang="pt-BR">
  <head>
   <meta charset="UTF-8">
-  <meta name="Generator" content="EditPlus®">
-  <meta name="Author" content="">
-  <meta name="Keywords" content="">
-  <meta name="Description" content="">
   <link rel="stylesheet" type="text/css" href="teamup.css">
  </head>
  <body>

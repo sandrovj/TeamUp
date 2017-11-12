@@ -10,6 +10,44 @@
     </head>
  
     <body>
+
+ <?php
+	// Tratamento dos cookies, referentes à preferencia do usuário
+	 $stesp="";
+		if(isset($_GET["filter"]) || !isset($_COOKIE['teamup-ctrl'])) {
+		if(isset($_GET["esp1"])) $stesp = $_GET["esp1"].", "; else $stesp = "";
+		if(isset($_GET["esp2"])) $stesp = $stesp.$_GET["esp2"].", "; 
+		if(isset($_GET["esp3"])) $stesp = $stesp.$_GET["esp3"].", "; 
+		if(isset($_GET["esp4"])) $stesp = $stesp.$_GET["esp4"].", "; 
+		if(isset($_GET["esp5"])) $stesp = $stesp.$_GET["esp5"].", "; 
+    	if(isset($_GET["esp6"])) $stesp = $stesp.$_GET["esp6"].", "; 
+    	if(isset($_GET["esp7"])) $stesp = $stesp.$_GET["esp7"].", "; 
+    	if(isset($_GET["esp8"])) $stesp = $stesp.$_GET["esp8"].", "; 
+    	if(isset($_GET["esp9"])) $stesp = $stesp.$_GET["esp9"].", "; 
+    	if(isset($_GET["esp10"])) $stesp = $stesp.$_GET["esp10"].", "; 
+    	if(isset($_GET["esp11"])) $stesp = $stesp.$_GET["esp11"].", "; 
+    	if(isset($_GET["esp12"])) $stesp = $stesp.$_GET["esp12"].", "; 
+		$stesp=substr($stesp, 0, strlen($stesp)-2);
+		
+		$r1=setcookie("teamup-ctrl[1]", "usr", time()+300); //id do usuário (e-mail)
+		$r2=setcookie("teamup-ctrl[2]", $stesp, time()+300); // string com os codigos dos esportes preferidos pelo usuáio;
+		//echo "Resultado da criação dos cookies: $r1 + $r2; cdusr: usr, cdesp setado para: $stesp";
+	 }
+	else{
+		// retornos seguintes à pagina
+		if (isset($_COOKIE['teamup-ctrl'])) {
+			foreach ($_COOKIE['teamup-ctrl'] as $name => $value) {
+				$name = htmlspecialchars($name);
+				$value = htmlspecialchars($value);
+				//  echo "Leitura do cookie numero $name: $value <br />\n";
+				if ($name=="2") $stesp = $value;
+			}
+		}
+	}
+	//echo "<p>Conteudo de stesp= $stesp </p>";
+?> 
+
+
         <header>
             <a id="logo-topo" href=index.php><img src="images/logo.jpg" width="246" height="70" border="0"></a>
             <a class="botao-topo" href=form_eventos.php>Crie seu evento</a>
@@ -26,7 +64,7 @@
         
         <div id="lista-eventos">
             <?php
-                lista_ultimos_eventos();
+                lista_ultimos_eventos($stesp);
             ?>
             <hr width="85%">
         </div>
@@ -38,38 +76,42 @@
             
         </div>
 
-        <?php
-            Function lista_ultimos_eventos()
-            {
+<?php
+	Function lista_ultimos_eventos($stesp)
+	{
+
+		
+		$host="localhost";
+		$user="id3200529_admin";
+		$pw="teamup";
+		$db="id3200529_teamup";
+        
+        if (empty($stesp))
+		  $query="SELECT a.cd_evnt, a.nm_evnt, DATE_FORMAT(a.dt_evnt, '%d/%m') as dt_evnt, b.nm_img FROM eventos a, imagem_esporte b WHERE a.cd_img_evnt = b.cd_img ORDER BY a.cd_evnt DESC LIMIT 4";
+        else{
+            
+            $query="SELECT a.cd_evnt, a.nm_evnt, DATE_FORMAT(a.dt_evnt, '%d-%m-%Y') as dt_evnt, b.nm_img FROM eventos a, imagem_esporte b WHERE a.cd_img_evnt = b.cd_img and a.cd_espt in ($stesp) ORDER BY a.cd_evnt DESC LIMIT 4";
+        }
+
+		
+		//Primeira tabela contem o Label, e os links para criar e listar eventos
+		echo "<table border=0 width=\"80%\" align=\"center\">";
+		echo "<tr><td> <h3> Proximos Eventos </h3> </td> <td align=\"center\"></tr>";
+		echo "</table>";
+
+		//---------------------------------------------------
 
 
-                $host="localhost";
-                $user="id3200529_admin";
-                $pw="teamup";
-                $db="id3200529_teamup";
+		$link = mysqli_connect($host, $user, $pw, $db);
+		if (mysqli_connect_errno()) {
+				printf("Conexão ao banco de dados falhou: %s\n", mysqli_connect_error());
+				exit();
+		}
 
-                $query="SELECT a.cd_evnt, a.nm_evnt, DATE_FORMAT(a.dt_evnt, '%d/%m') as dt_evnt, b.nm_img FROM eventos a, imagem_esporte b WHERE a.cd_img_evnt = b.cd_img ORDER BY a.cd_evnt DESC LIMIT 4";
+		$rs=mysqli_query($link, $query);
 
-
-
-                //Primeira tabela contem o Label, e os links para criar e listar eventos
-                echo "<table border=0 width=\"80%\" align=\"center\">";
-                echo "<tr><td> <h3> Proximos Eventos </h3> </td> <td align=\"center\"></tr>";
-                echo "</table>";
-                //---------------------------------------------------
-
-
-                $link = mysqli_connect($host, $user, $pw, $db);
-                if (mysqli_connect_errno()) {
-                        printf("Conexão ao banco de dados falhou: %s\n", mysqli_connect_error());
-                        exit();
-                }
-
-                $rs=mysqli_query($link, $query);
-
-                //-----------------------------------------
-
-                echo "<table border=0 width=\"80%\" align=\"center\">";
+		//-----------------------------------------
+		                echo "<table border=0 width=\"80%\" align=\"center\">";
                 echo "<tr> \n";
                   while ($row = $rs->fetch_assoc()) {
                         printf ("<td width=\"110\">\n");
@@ -78,10 +120,11 @@
                         printf ("</td>\n");
                     }
                 echo "</tr></table>";
-                mysqli_close($link);
-                return true;
-            }
-        
+
+		//---------------
+		mysqli_close($link);
+		return true;
+		}
             Function lista_categorias()
             {
 
@@ -131,44 +174,77 @@
             
         </footer>
         
-        <script type="text/javascript">
+<?php
+    Function montaDialogoEsportes(){
 
-            $(document).ready(function(){
+        $host="localhost";
+        $user="id3200529_admin";
+        $pw="teamup";
+        $db="id3200529_teamup";
+        $query="SELECT cd_espt, nm_espt FROM esportes";
 
-                var $dialog = $('<div></div>')
-                .html('<form id="myform" action=""><input type="checkbox"   id="futebol" name="esp1" value="Futebol" />Futebol<br /><input type="checkbox" name="esp2" value="voleibol" /> Voleibol <br /><input type="checkbox" name="esp3" value="corrida" />Corrida<br /><input type="checkbox" name="esp4" value="tenis" />Tenis<br /><input type="checkbox" name="esp5" value="outros" />Outros esportes<br /></form>')
-                .dialog({
-                    autoOpen: false,
-                    title: 'Selecione as modalidades',
-                    /*position: { my: "center top", at: "top center"},*/
-                    buttons: {
-                      "Confirmar": function() {  $('form#myform').submit();},
-                      "Cancelar": function() {$(this).dialog("close");}
-                    }
-                });
+        // echo $query;
 
-                $('#createNew').click(function() {
-                    $dialog.dialog('open');
-                    // prevent the default action, e.g., following a link
-                    return false;
-                });
+        $link = mysqli_connect($host, $user, $pw, $db);
+        /* check connection */
+        if (mysqli_connect_errno()) {
+                printf("Connect failed: %s\n", mysqli_connect_error());
+                exit();
+        }
 
-                $('form#myform').submit(function(){
-                    // alert('Futebol checkobox is checked or not ==> ' + $('#futebol').is(':checked'));
+        echo "var \$dialog = \$('<div></div>')";
+        echo ".html('<form id=\"myform\" action=\"\"> <input type=\"hidden\" id=\"filter\" name=\"filter\" value=\"1\"/> <br />";
+        $rs=mysqli_query($link, $query);
+          while ($row = $rs->fetch_assoc()) {
+              $nome=$row["nm_espt"];
+              $cod=$row["cd_espt"];
+              printf("<input type=\"checkbox\" id=\"%s\" name=\"esp%d\" value=\"%d\" />%s<br />",$nome, $cod, $cod, $nome );
+            }
+        mysqli_close($link);
+        echo "</form>')";
+        return true;
 
-                    // loop like this
+    //var $dialog = $('<div></div>')
+    //    .html('<form id="myform" action=""> <input type="hidden" id="filter" name="filter" value="1" required/> <br /> <input type="checkbox" id="futebol" name="esp1" value="1" />Futebol<br /><input type="checkbox" name="esp2" value="2" /> Voleibol <br /><input type="checkbox" name="esp3" value="3" />Tênis<br /><input type="checkbox" name="esp4" value="4" />Corrida<br /><input type="checkbox" name="esp5" value="5" />Outros esportes<br /></form>')
+    //
+    }
+     
+?>
 
-                    // $(this).find('input[type="checkbox"]').each(function(){
-                    //  alert($(this).val() + ' ==> ' + $(this).is(':checked'));
-                    // })
+     
+<script type="text/javascript">
+    
+	$(document).ready(function(){
+    
+    //Aciona a função para montar dinamicamente os esportes para a caixa de dialogo
+    <?php
+        montaDialogoEsportes();
+    ?>
+        .dialog({
+        autoOpen: false,
+        title: 'Informe seu email e modalidades preferidas',
+        /*position: { my: "center top", at: "top center"},*/
+        buttons: {
+          "Confirmar": function() {  $('form#myform').submit();},
+          "Cancelar": function() {$(this).dialog("close");}
+        }
+    });
+
+	$('#createNew').click(function() {
+		$dialog.dialog('open');
+		// prevent the default action, e.g., following a link
+		return false;
+	});
+
+	$('form#myform').submit(function(){
+		
+	  $dialog.dialog('close');
+	});        
 
 
-                    $dialog.dialog('close');
-                });        
-
-
-            });
-        </script>
+	});
+    
+</script>
 
     </body>
 </html>
