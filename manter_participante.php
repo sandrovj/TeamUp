@@ -8,10 +8,11 @@
 
 	<header>
             <a id="logo-topo" href=index.php><img src="images/logo.jpg" width="246" height="70" border="0"></a>
-            <a class="botao-topo" href=form_eventos.php>Crie seu evento</a>
-            <a class="botao-topo" href=lista_eventos.php?cdesp=0>Veja os eventos disponiveis</a> 
+            <a id="createNew" class="botao-topo"'><img src="images/list%20(1).png" width="40" height="40" border="0"></a>
+            <a class="botao-topo" href=lista_eventos.php?cdesp=0><img src="images/veja%20todos%20os%20eventos%20disponiveis2.png"></a> 
+            <a class="botao-topo" href=form_eventos.php><img src="images/crie%20seu%20evento2.png"></a>
             
-     </header>
+        </header>
 	<hr width="85%">
 
  <?php
@@ -22,12 +23,6 @@
 	if(isset($_POST["empart"])) $empart = $_POST["empart"]; else $empart = "VAZIO";
 	if(isset($_POST["telpart"])) $telpart = $_POST["telpart"]; else $telpart = "VAZIO";
 	if(isset($_POST["cdevt"])) $cdevt = $_POST["cdevt"]; else $cdevt = "VAZIO";
-
-	
-	//printf("<p> Nome do participante: %s \n", $nmpart);
-	//printf("<p> e-mail do participante: %s \n", $empart);
-	//printf("<p> telefone de contato:: %s \n", $telpart);
-	//printf("<p> Codigo de evento: %s \n", $cdevt);
 
 	insere_participante($cdevt, $nmpart, $empart, $telpart);
 	
@@ -58,7 +53,11 @@
 			{
 				echo"<p> Inscrição efetuada com sucesso.";
 				Set_numero_vagas($cdevt);
+                if (Atingiu_quorum_minimo($cdevt))
+                    Envia_email_confirmacao($cdevt);
 			}
+            else
+                echo"<p> Inscrição não efetuada. Verifique se o atleta já está inscrito no evento.";
 		}
 		else
 			echo "<p>O numero máximo de participantes para esse evento já foi atingido.";
@@ -67,8 +66,132 @@
 		echo "<p><a href=.\detalha_evento.php?cdevt=$cdevt> Voltar para a página do evento </a>";
 
 	}
+//--------------------------------------------
+     
+    function Envia_email_confirmacao($cdevt){
 
+            
+        $host="localhost";
+		$user="id3200529_admin";
+		$pw="teamup";
+		$db="id3200529_teamup";
 
+		if($cdevt>0) 
+		{
+            $query="SELECT a.nm_evnt, a.lc_evnt, DATE_FORMAT(a.dt_evnt, '%d/%m') as dt_evnt, a.hr_evnt, b.email_atlt FROM eventos a, atletas b, atlt_prtc_evnt c WHERE a.cd_evnt = c.cd_evnt and b.cd_atlt=c.cd_atlt and a.cd_evnt=$cdevt ";
+
+            $link = mysqli_connect($host, $user, $pw, $db);
+            /* check connection */
+            if (mysqli_connect_errno()) {
+                    printf("Connect failed: %s\n", mysqli_connect_error());
+                    exit();
+            }
+
+            $rs=mysqli_query($link, $query);
+            $nlinha=0;
+            $to="";
+            while ($row = $rs->fetch_assoc()) {
+                 if($nlinha>0)
+                    $to=$to . ", ";
+                else{
+                    $nmevt=$row["nm_evnt"];
+                    $lcevt=$row["lc_evnt"];
+                    $dtevt=$row["dt_evnt"];
+                    $hrevt=$row["hr_evnt"];
+                }
+                 $to=$to . $row["email_atlt"];
+                 $nlinha++;
+            }
+            envia_email($cdevt, $to, $nmevt, $lcevt, $dtevt, $hrevt);
+        
+        }
+		else
+			echo "Não localizado o código do evento.";
+		return true;
+    }
+   //----------------------------------------------  
+      function envia_email($cdevt, $emprt, $nmevt, $lcevt, $dtevt, $hrevt){
+         
+        $from = "teamupowner@gmail.com";
+         
+        $to  = $emprt; 
+        
+        $text = trim($emprt);
+        $textAr = explode("\n", $text);
+        $textAr = array_filter($textAr, 'trim'); // remove any extra \r characters left behind
+
+        
+        $subject = "TeamUP - Evento confirmado: $nmevt";
+
+        $message = '<html>
+            <head>
+                <title>O evento $nmevt está confirmado e sua participação está garantida!'.$nmevt.'</title>
+            </head>
+                <body>
+                    <p>Evento confirmado:<strong>'.$nmevt.'</strong></p>
+                    <table>
+                        <tr>
+                            <td>Data do evento: </td><td>'.$dtevt.'</td>
+                        </tr>
+                        <tr>
+                            <td>Local do evento: </td><td>'.$lcevt.'</td>
+                        </tr>
+                    </table>
+                    <p>Para mais detalhes sobre o evento, clique <a href="http://team-up.000webhostapp.com/detalha_evento.php?cdevt='.$cdevt.'">aqui</a>.</p>
+                </body>
+            </html>
+        ';
+        printf($message);
+
+       $headers  = 'MIME-Version: 1.0' . "\r\n";
+       $headers .= 'Content-type: text/html; charset=utf-8' . "\r\n";
+       $headers .= 'From: TeamUp <teamupowner@gmail.com>' . "\r\n";
+
+        Mail ($to, $subject, $message, $headers);
+
+        Echo "A mensagem de e-mail foi enviada.";         
+     }
+     
+    
+     
+     
+//--------------------------------------------
+     	function Atingiu_quorum_minimo($cdevt)
+	{
+		$host="localhost";
+		$user="id3200529_admin";
+		$pw="teamup";
+		$db="id3200529_teamup";
+        $res=false;
+
+		$query="SELECT qt_prtc_insc, qt_prtc_min from eventos where cd_evnt=$cdevt";
+
+		//echo "<p> $query";
+
+		$link = mysqli_connect($host, $user, $pw, $db);
+		/* check connection */
+		if (mysqli_connect_errno()) {
+				printf("Connect failed: %s\n", mysqli_connect_error());
+				exit();
+		}
+
+		$rs=mysqli_query($link, $query);
+			if($rs)
+			{
+				$row = $rs->fetch_row();
+				$qtinsc=$row[0];
+                $qtmin=$row[1];
+                $res=$qtinsc>=$qtmin;
+			}
+			else {
+				//erro na execução da query
+				printf ("<p>Erro na execução da query para localizar o atleta na tabela - É preciso fazer a inscrição");
+				//	$cdatlt=insere_atleta($empart, $nmpart, $telpart);
+			}
+		mysqli_close($link);
+		return ($res);
+	}
+//--------------------------------------------
 	Function Get_codigo_atleta($empart)
 	{
 		$host="localhost";
