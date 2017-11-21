@@ -8,10 +8,11 @@
 
 	<header>
             <a id="logo-topo" href=index.php><img src="images/logo.jpg" width="246" height="70" border="0"></a>
-            <a class="botao-topo" href=form_eventos.php>Crie seu evento</a>
-            <a class="botao-topo" href=lista_eventos.php?cdesp=0>Veja os eventos disponiveis</a> 
+            <a id="createNew" class="botao-topo"'><img src="images/list%20(1).png" width="40" height="40" border="0"></a>
+            <a class="botao-topo" href=lista_eventos.php?cdesp=0><img src="images/veja%20todos%20os%20eventos%20disponiveis2.png"></a> 
+            <a class="botao-topo" href=form_eventos.php><img src="images/crie%20seu%20evento2.png"></a>
             
-     </header>
+        </header>
 
  <?php
 	/*-------------------------------------------------------------------------------------*/
@@ -21,31 +22,33 @@
 	if(isset($_POST["lcevt"])) $lcevt = $_POST["lcevt"]; else $lcevt = "VAZIO";
 	if(isset($_POST["dtevt"])) $dtevt = $_POST["dtevt"]; else $dtevt = "VAZIO";
 	if(isset($_POST["hrevt"])) $hrevt = $_POST["hrevt"]; else $hrevt = "VAZIO";
-	if(isset($_POST["qtprt"])) $qtprt = $_POST["qtprt"]; else $qtprt = "VAZIO";
+    if(isset($_POST["minpt"])) $minpt = $_POST["minpt"]; else $minpt = "VAZIO";
+	if(isset($_POST["maxpt"])) $maxpt = $_POST["maxpt"]; else $maxpt = "VAZIO";
 	if(isset($_POST["cdesp"])) $cdesp = $_POST["cdesp"]; else $cdesp = "VAZIO";
 	if(isset($_POST["emorg"])) $emorg = $_POST["emorg"]; else $emorg = "VAZIO";
     if(isset($_POST["cnvds"])) $cnvds = $_POST["cnvds"]; else $cnvds = "VAZIO";
 
-	
+	printf("<div id=\"tela-gravar\">");
+    printf("<p> <b> DETALHES DO EVENTO</b>\n");
 	printf("<p> Nome do evento: %s \n", $nmevt);
 	printf("<p> Local do evento: %s \n", $lcevt);
 	printf("<p> Data do evento: %s \n", $dtevt);
 	printf("<p> Hora do evento: %s \n", $hrevt);
-	printf("<p> Qtde de participantes: %s \n", $qtprt);
+    printf("<p> Mínimo de participantes: %s \n", $minpt);
+	printf("<p> Máximo de participantes: %s \n", $maxpt);
 	printf("<p> Código da modalidade: %s \n", $cdesp);
 	printf("<p> e-mail do organizador: %s \n", $emorg);
 
-	grava_evento($nmevt, $lcevt, $dtevt, $hrevt, $cdesp, $emorg, $qtprt);
+	grava_evento($nmevt, $lcevt, $dtevt, $hrevt, $cdesp, $emorg, $minpt ,$maxpt);
     $cdevt = Get_codigo_evento($nmevt,$dtevt);
     envia_convites($nmevt, $lcevt, $dtevt, $hrevt,$cnvds,$cdevt);
-	
-	?>
+	 printf("</div>");
+    ?>
 
 	<?php
 	
-	Function grava_evento($nmevt, $lcevt, $dtevt, $hrevt, $cdesp, $emorg, $qtprt)
+	Function grava_evento($nmevt, $lcevt, $dtevt, $hrevt, $cdesp, $emorg, $minpt, $maxpt)
 	{
-		echo "<p> <b> detalhes do evento </b>\n";
 
 		$host="localhost";
 		//$host="dados.000webhost.com"
@@ -54,7 +57,7 @@
 		$db="id3200529_teamup";
 
 					//	$query="SELECT * FROM eventos where cd_evnt=$cdevt";
-		$query="INSERT into eventos(nm_evnt, lc_evnt, dt_evnt, hr_evnt, cd_espt, em_orgn, qt_prtc_max, cd_img_evnt) VALUES (\"$nmevt\", \"$lcevt\", date(\"$dtevt\"), time(\"$hrevt\"), $cdesp, \"$emorg\", $qtprt, $cdesp)";
+		$query="INSERT into eventos(nm_evnt, lc_evnt, dt_evnt, hr_evnt, cd_espt, em_orgn, qt_prtc_min ,qt_prtc_max, cd_img_evnt) VALUES (\"$nmevt\", \"$lcevt\", date(\"$dtevt\"), time(\"$hrevt\"), $cdesp, \"$emorg\", $minpt ,$maxpt, $cdesp)";
 		//**lembrete -> ajustar codigo da imagem, para permitir upload pelo usuário
 
 		//echo $query;
@@ -68,7 +71,7 @@
 
 		$rs=mysqli_query($link, $query);
 			if($rs)
-			    printf ("<p>Registro inserido com sucesso");
+			    printf ("<p><b>Evento Registrado!</b>");
 			else 
 				printf ("<p>Falha na inserção do registro - codigo: %b", $rs);
 		mysqli_close($link);
@@ -87,7 +90,6 @@
 
         foreach ($textAr as $line) {
             $to .= $line.',';
-            printf("Lista de email: %s", $to);
         } 
  
 
@@ -111,15 +113,13 @@
                 </body>
             </html>
         ';
-        printf($message);
 
        $headers  = 'MIME-Version: 1.0' . "\r\n";
        $headers .= 'Content-type: text/html; charset=utf-8' . "\r\n";
        $headers .= 'From: TeamUp <teamupowner@gmail.com>' . "\r\n";
 
         Mail ($to, $subject, $message, $headers);
-
-        Echo "A mensagem de e-mail foi enviada.";         
+         
      }
      
      Function Get_codigo_evento($nmevt,$dtevt)
