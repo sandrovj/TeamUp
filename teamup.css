@@ -76,20 +76,17 @@ body:menuitem
 }
 table
 {
+    position:relative;
 	font-family: Arial, Verdana, Helvetica;
-	font-size: 14px;
-	color: rgb(132, 132, 132);
+	font-size: 12px;
+	color: rgb(255, 255, 255);
 	/*padding: 10px; */
-    text-align: left;
+    text-align: center;
 }
-td
-{
-	height: 30px}
 
 .a td{
-    font-size:18px;
-	padding-left: 80px;
-	padding-bottom: 10px;
+    font-size:16px;
+	padding-bottom: 1%;
 	color: rgb(255, 255, 255);  }
 
 
@@ -101,17 +98,19 @@ td
 
 
 #caixa-busca {
-    height: 50px;
     font-size: 30px;
     text-align: center;
     margin-left: 25%;
-    margin-top: 22%;
+    margin-right:25%;
+    margin-top: 20%;
+    margin-bottom: 20%;
 }
 
 #busca {
-    background-size: 1500px 550px;
     background-image: url(./images/barra_buscas.jpg);
-    height: 520px;
+    background-repeat:no-repeat;
+    background-size:contain;
+    background-position:center;
     margin-left:10%;
     margin-right: 10%;
 }
@@ -123,13 +122,9 @@ td
 .botao-topo {
     font-size: 30px; 
     float:right;
-    padding-top:10px;
+    padding-top:40px;
     padding-left: 20px;
 }
-
-
-
-
 
 hr {
     margin-top:20px;
@@ -142,7 +137,7 @@ header {
 }
 
 .dados-evt {
-    background-color: #1b1b1b;
+    background-color: #000000;
     border: thin;
     border-left-color: #707070;
 }
@@ -150,16 +145,13 @@ footer {
     padding-top: 5%;
 }
 
-
-input {
-    font-size: 20px;
-}
-
 #form-criacao {
     position:relative;
-    height: 650px;
-    width:1432px;
+    background-size:contain;
+    background-position:center;
+    padding-bottom:10%;
     margin-left: 10%;
+    margin-right: 10%;
 }
 #form-criacao:after{
     content : "";
@@ -168,8 +160,29 @@ input {
     top: 0;
     left: 0;
     background-image: url(./images/criacao_fundo3.jpg);
+    background-repeat:no-repeat;
     width: 100%;
     height: 100%;
     opacity : 0.3;
     z-index: -1;
+}
+#proxevt {
+    font-size: 20px;
+    margin-left: 10%;
+}
+
+.detevt {
+    margin-left: 10%;
+    font-size:14px;
+}
+
+#tabelaform {
+    text-align:left;
+}
+#form-insc{
+    text-align: left;
+}
+#tela-gravar{
+    font-size:14px;
+    padding-left: 10%;
 }

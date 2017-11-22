@@ -50,9 +50,9 @@
 
         <header>
             <a id="logo-topo" href=index.php><img src="images/logo.jpg" width="246" height="70" border="0"></a>
-            <a class="botao-topo" href=form_eventos.php>Crie seu evento</a>
-            <a class="botao-topo" href=lista_eventos.php?cdesp=0>Veja todos os eventos disponiveis</a> 
             <a id="createNew" class="botao-topo"'><img src="images/list%20(1).png" width="40" height="40" border="0"></a>
+            <a class="botao-topo" href=lista_eventos.php?cdesp=0><img src="images/veja%20todos%20os%20eventos%20disponiveis2.png"></a> 
+            <a class="botao-topo" href=form_eventos.php><img src="images/crie%20seu%20evento2.png"></a>
             
         </header>
     
@@ -90,13 +90,13 @@
 		  $query="SELECT a.cd_evnt, a.nm_evnt, DATE_FORMAT(a.dt_evnt, '%d/%m') as dt_evnt, b.nm_img FROM eventos a, imagem_esporte b WHERE a.cd_img_evnt = b.cd_img ORDER BY a.cd_evnt DESC LIMIT 4";
         else{
             
-            $query="SELECT a.cd_evnt, a.nm_evnt, DATE_FORMAT(a.dt_evnt, '%d-%m-%Y') as dt_evnt, b.nm_img FROM eventos a, imagem_esporte b WHERE a.cd_img_evnt = b.cd_img and a.cd_espt in ($stesp) ORDER BY a.cd_evnt DESC LIMIT 4";
+            $query="SELECT a.cd_evnt, a.nm_evnt, DATE_FORMAT(a.dt_evnt, '%d/%m') as dt_evnt, b.nm_img FROM eventos a, imagem_esporte b WHERE a.cd_img_evnt = b.cd_img and a.cd_espt in ($stesp) ORDER BY a.cd_evnt DESC LIMIT 4";
         }
 
 		
 		//Primeira tabela contem o Label, e os links para criar e listar eventos
 		echo "<table border=0 width=\"80%\" align=\"center\">";
-		echo "<tr><td> <h3> Proximos Eventos </h3> </td> <td align=\"center\"></tr>";
+		echo "<tr><td> <h3> Próximos Eventos </h3> </td> <td align=\"center\"></tr>";
 		echo "</table>";
 
 		//---------------------------------------------------
@@ -211,7 +211,6 @@
      
 ?>
 
-     
 <script type="text/javascript">
     
 	$(document).ready(function(){
