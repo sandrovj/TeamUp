@@ -81,7 +81,7 @@
 	{
 
 		
-		$host="localhost";
+		$host="https://databases.000webhost.com/";
 		$user="id3200529_admin";
 		$pw="teamup";
 		$db="id3200529_teamup";
@@ -129,7 +129,7 @@
             {
 
 
-                $host="localhost";
+                $host="https://databases.000webhost.com/";
                 $user="id3200529_admin";
                 $pw="teamup";
                 $db="id3200529_teamup";
@@ -177,7 +177,7 @@
 <?php
     Function montaDialogoEsportes(){
 
-        $host="localhost";
+        $host="https://databases.000webhost.com/";
         $user="id3200529_admin";
         $pw="teamup";
         $db="id3200529_teamup";
